@@ -1,93 +1,92 @@
 /* 
 HOW TO USE:
 FOUR arguments must be passed to use this function. 
-1)an array of objects to cycle thru, [{},{},{}]
-2)and array object containing the display elements ids [{ elmntId: "myDivId", arrObjProp: "name" },{},{}...]
+1)1st argument must be an array of objects to cycle thru, [{},{},{}] or and array of strings
+2)2nd argument must be an array containing the two ids of the forward and back buttons
     and the properties of the cycled array objects you want to display, 
-3)And the two html backward and forward buttons ids 
+3)
+    If you are passing an array of objects in the first argument, then the 3rd argument must be and array of two arrays (multi-dimensional)
+    The first array must be and array of the ids of one or more HTML element(s) that will display the data 
+    The second array must be the properties of the objects passed in thru the first argument array
+ 
+    If you are passing an array of strings in the first argument, then the 3rd argument can be one array with one item, (not Multi-dimensional). 
+    This one item is the id of the HTML element to display the data.
+    Or you just pass the one string that is the id of the HTML element to display the data
 */
 
 //cycleBackAndForth is dependant on cycleThru() to generate the numbers to use as indexes in the array
+//DATA ARRAY option 1
 let breakfast = [
-  { name: "bacon", amount: 5 },
-  { name: "pancakes", amount: 2 },
-  { name: "eggs", amount: 3 },
-  { name: "sausage", amount: 2 }
+  ////////////////////////////////////////
+  { name: "bacon", amount: 5 }, ////////////////////////////////////////
+  { name: "pancakes", amount: 2 }, ////////////////////////////////////////
+  { name: "eggs", amount: 3 }, ////////////////////////////////////////
+  { name: "sausage", amount: 2 } ////////////////////////////////////////
 ];
-let breakfast2 = ["bacon", "pancakes", "eggs", "sausage"];
-let dirBtnIdsArr = ["forward", "back"];
+//DATA ARRAY option 2
+let breakfast2 = ["bacon", "pancakes", "eggs", "sausage"]; ////////////////////////////////////////
+//ids of cycle direction buttons.                           ////////////////////////////////////////
+let dirBtnIdsArr = ["forward", "back"]; ////////////////////////////////////////
+
 let elmtIdAnPropsFromPassedArrayToDisplayArr = [
-    { elmntId: "plate", passedArrProp: "name" },
-    { elmntId: "cup", passedArrProp: "amount" },
+  ["plate", "cup"], //array of html ids
+  ["name", "amount"] //array of the properties of the passed array, if passing an array of object
 ];
+
+//Calling the function
 cycleBackAndForward(
-  breakfast,
-  dirBtnIdsArr,
-  elmtIdAnPropsFromPassedArrayToDisplayArr
+  breakfast2, ///data array
+  dirBtnIdsArr, ////btn ids array
+  elmtIdAnPropsFromPassedArrayToDisplayArr ///HTML display ids and properites multi-dimensional array if passing and array of objects for the data    OR a simple string if 1st argument is an array of strings
 );
 
 function cycleBackAndForward(dataArr, dirBtnIdsArr, elIdnPropsArr) {
-    if (!Array.isArray(dataArr)) {
-        console.log('not arr')
-        return;
-    }
   let fwd = document.querySelector(`#${dirBtnIdsArr[0]}`);
   let bck = document.querySelector(`#${dirBtnIdsArr[1]}`);
   let length = `${dataArr.length}`; //This could be the array length that you want to cycle through
   let numb = cycleThru(length); //closure to be called here once
+  let isAllStrings = dataArr.every(item => typeof item === "string"); //checks if passed in array is all strings
+  let isAllObjects = dataArr.every(item => typeof item === "object"); //checks if passed in array is all objects
+  let singleId;
+
+  //checks if the data passed in is an array, and if the button ids are passed in as an array.
+  if (!Array.isArray(dataArr) || !Array.isArray(dirBtnIdsArr)) {
+    console.log("not arr");
+    return;
+  }
+  //checks if id
+  if (Array.isArray(elmtIdAnPropsFromPassedArrayToDisplayArr)) {
+    singleId = elmtIdAnPropsFromPassedArrayToDisplayArr[0];
+  } else if (typeof elmtIdAnPropsFromPassedArrayToDisplayArr === "string") {
+    singleId = elmtIdAnPropsFromPassedArrayToDisplayArr;
+  }
 
   fwd.addEventListener("click", e => {
     const _DIRECTION = "forward";
-    //   let keys = displayElmntIdsandPropObj.map((obj) => {
-    //       return Object.keys(obj)
-    //   })
-    // let keysArr = Object.keys(display[0]);
-    // console.log(keys[0]);
     let indexNum = numb(length, _DIRECTION); //returns a number to use to cycle thru array
-    //   displayElmntIdsandPropObj.forEach(obj => {
-    //     console.log(`${obj[elmntId]}`)
-    //   document.querySelector(`#${obj.elmntId}`).textContent = `${
-    //     arr[indexNum][obj.arrObjProp]
-    //   }`;
-    // });
 
-    let isAllStrings = dataArr.every(item => typeof item === "string"); //checks if passed in array is all strings
-    let isAllObjects = dataArr.every(item => typeof item === "object"); //checks if passed in array is all strings
     if (isAllStrings) {
-      console.log(dataArr[indexNum], "--");
+      document.querySelector(`#${singleId}`).innerText = dataArr[indexNum];
     } else if (isAllObjects) {
-      //   [{x:y,a:b},{x:y,a:b}];
-      //   let keysArr = []
-      //   arr.forEach((obj) => {
-      //       keysArr.push(Object.keys(obj))
-      //   })
-      let keys = Object.keys(dataArr[0]);
-      document.querySelector(`#${keys}`);
-      //   console.log(arr[indexNum][],"--");
-      console.log(keys);
+      for (let i = 0; i < elIdnPropsArr.length; i++) {
+        //elIdnPropsArr[0].length;
+        document.querySelector(`#${elIdnPropsArr[0][i]}`).innerText =
+          dataArr[indexNum][elIdnPropsArr[1][i]];
+      }
     }
-    //   displayit(breakfast, ids, indexNum);
   });
   bck.addEventListener("click", e => {
     const _DIRECTION = "back";
     let indexNum = numb(length, _DIRECTION); //returns a number to use to cycle thru array
-    // displayElmntIdsandPropObj.forEach(obj => {
-    //   document.querySelector(`#${obj.elmntId}`).textContent = `${
-    //     arr[indexNum][obj.arrObjProp]
-    //   }`;
-    // });
-    //   console.log(indexNum)
-    let isAllStrings = dataArr.every(item => typeof item === "string");
+    //let isAllStrings = dataArr.every(item => typeof item === "string");
     if (isAllStrings) {
-      console.log(dataArr[indexNum], "--");
-    } else {
-        elIdnPropsArr.forEach((obj, index) => {
-            console.log(index)
-    //         console.log(document.querySelector(`#${obj[index]}`));
-    //   document.querySelector(`#${obj[index]}`).textContent = `${
-    //     dataArr[indexNum][obj[index]]
-    //   }`;
-    });
+      document.querySelector(`#${singleId}`).innerText = dataArr[indexNum];
+    } else if (isAllObjects) {
+      for (let i = 0; i < elIdnPropsArr.length; i++) {
+        //elIdnPropsArr[0].length;
+        document.querySelector(`#${elIdnPropsArr[0][i]}`).innerText =
+          dataArr[indexNum][elIdnPropsArr[1][i]];
+      }
     }
   });
 }

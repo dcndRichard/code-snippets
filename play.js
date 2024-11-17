@@ -18,10 +18,10 @@ FOUR arguments must be passed to use this function.
 //DATA ARRAY option 1
 let breakfast = [
   ////////////////////////////////////////
-  { name: "bacon", amount: 5 }, ////////////////////////////////////////
-  { name: "pancakes", amount: 2 }, ////////////////////////////////////////
-  { name: "eggs", amount: 3 }, ////////////////////////////////////////
-  { name: "sausage", amount: 2 } ////////////////////////////////////////
+  { name: "bacon", amount: 5,cook:"duane" }, ////////////////////////////////////////
+  { name: "pancakes", amount: 2,cook:"christina" }, ////////////////////////////////////////
+  { name: "eggs", amount: 3,cook:"nate" }, ////////////////////////////////////////
+  { name: "sausage", amount: 2,cook:"david" } ////////////////////////////////////////
 ];
 //DATA ARRAY option 2
 let breakfast2 = ["bacon", "pancakes", "eggs", "sausage"]; ////////////////////////////////////////
@@ -29,13 +29,13 @@ let breakfast2 = ["bacon", "pancakes", "eggs", "sausage"]; /////////////////////
 let dirBtnIdsArr = ["forward", "back"]; ////////////////////////////////////////
 
 let elmtIdAnPropsFromPassedArrayToDisplayArr = [
-  ["plate", "cup"], //array of html ids
-  ["name", "amount"] //array of the properties of the passed array, if passing an array of object
+  ["food", "person", "quantity"], //array of html ids
+  ["name", "cook", "amount",] //array of the properties of the passed array, if passing an array of object
 ];
 
 //Calling the function
 cycleBackAndForward(
-  breakfast2, ///data array
+  breakfast, ///data array
   dirBtnIdsArr, ////btn ids array
   elmtIdAnPropsFromPassedArrayToDisplayArr ///HTML display ids and properites multi-dimensional array if passing and array of objects for the data    OR a simple string if 1st argument is an array of strings
 );
@@ -68,9 +68,8 @@ function cycleBackAndForward(dataArr, dirBtnIdsArr, elIdnPropsArr) {
     if (isAllStrings) {
       document.querySelector(`#${singleId}`).innerText = dataArr[indexNum];
     } else if (isAllObjects) {
-      for (let i = 0; i < elIdnPropsArr.length; i++) {
-        //elIdnPropsArr[0].length;
-        document.querySelector(`#${elIdnPropsArr[0][i]}`).innerText =
+      for (let i = 0; i <= elIdnPropsArr.length; i++) {
+        document.querySelector(`#${elIdnPropsArr[0][i]}`).innerText = 
           dataArr[indexNum][elIdnPropsArr[1][i]];
       }
     }
@@ -82,8 +81,7 @@ function cycleBackAndForward(dataArr, dirBtnIdsArr, elIdnPropsArr) {
     if (isAllStrings) {
       document.querySelector(`#${singleId}`).innerText = dataArr[indexNum];
     } else if (isAllObjects) {
-      for (let i = 0; i < elIdnPropsArr.length; i++) {
-        //elIdnPropsArr[0].length;
+      for (let i = 0; i <= elIdnPropsArr.length; i++) {
         document.querySelector(`#${elIdnPropsArr[0][i]}`).innerText =
           dataArr[indexNum][elIdnPropsArr[1][i]];
       }

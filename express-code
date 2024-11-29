@@ -1,0 +1,52 @@
+const express = require("express");
+const { createServer } = require("node:http");
+const { query,body,matchedData,resultValidation,chechShcema } = require("express-validation");
+const { Server } = require("socket.io");
+const session = require(express-session);
+const { join } = require("node:path");
+const routes = join(process.cwd(),'routes','index.js');
+
+const app = express();
+const server = createServer(app)
+const io = new Server(server);
+const sessionMiddleware = session({
+  secret : 'encryptedsessionxyzabc',
+  saveUninitialized : false;
+  resave: false;
+  cookie : {
+    maxAge: 60000 * 60;
+  }
+});
+
+//MIDDLEWARE
+app.use(express.static(public));
+app.use(sessionMiddleware);
+app.use(express.urlencoded({extended:true});
+app.use(express.json());
+app.use(routes);
+
+let rooms = {}
+app.get('/', (req, res)=>{
+  return res.render('index',{rooms:rooms});
+})
+app.get('/:room', (req,res)=>{
+  return res.render('rooms',{roomName:req.params.room});
+})
+
+io.engine.session(sessionMiddleware);
+io.on('connection',(socket)=>{
+  console.log("new socket connected");
+  const session = socket.request.session;
+  socket.broadcast.emit('back to client','introduction')
+})
+
+
+
+
+
+
+server.listen(PORT,(err)=>{
+  if(!err)
+    console.log(`listening on port ${PORT}`);
+  console.log(err.message);
+})

@@ -33,7 +33,7 @@ app.get('/:room', (req,res)=>{
   return res.render('rooms',{roomName:req.params.room});
 })
 
-io.engine.session(sessionMiddleware);
+io.engine.use(sessionMiddleware);
 io.on('connection',(socket)=>{
   console.log("new socket connected");
   const session = socket.request.session;

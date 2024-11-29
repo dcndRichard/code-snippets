@@ -1,0 +1,5 @@
+<div id="room-container">
+    <% Object.keys(rooms).forEach((room)=>{
+      <div></div>
+    })%>
+</div>

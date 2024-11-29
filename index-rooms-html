@@ -1,5 +1,10 @@
 <div id="room-container">
-    <% Object.keys(rooms).forEach((room)=>{
-      <div></div>
-    })%>
+    <% Object.keys(rooms).forEach((room)=>{ %>
+    <div><%=room%></div>
+    <a href="/<%=room%>">join</a>
+    <%})%>
+    <form action="/room" method="POST">
+        <input type="text" name="room" required />
+        <input type="submit" value="send" />
+    </form>
 </div>

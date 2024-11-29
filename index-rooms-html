@@ -8,3 +8,20 @@
         <input type="submit" value="send" />
     </form>
 </div>
+
+
+
+
+//------------------------------
+? room.ejs
+let roomContainer = document.querySelector('room-container')
+
+socket.on('room created',(room)=>{
+    const roomElement = document.createElement('div');
+    roomElement.innerText = room;
+    const roomLink = document.createElement('a');
+    roomLink.href = `/${room}`;
+    roomLink.innerText = 'join';
+    roomContainer.append(roomElement);
+    roomContainer.append(roomLink);
+})

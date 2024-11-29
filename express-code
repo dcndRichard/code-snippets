@@ -30,7 +30,25 @@ app.get('/', (req, res)=>{
   return res.render('index',{rooms:rooms});
 })
 app.get('/:room', (req,res)=>{
+  //checks if a room exsist
+  if(rooms[req.params.room] == null){
+    return res.redirect('/');
+  }
   return res.render('rooms',{roomName:req.params.room});
+})
+
+app.post('/room', (req,res)=>{
+  //first check if room dosent already exsist so we dont overwrite it
+  if(rooms[req.body.room] != null){
+    return res.redirect('/')
+  }
+  //the rooms object up top, with the propery of the value room name of the input form = an object with the users property with a value of another object that will hold the users 
+  rooms[req.body.room] = {users : {}}
+  //redirect to the new room
+  res.redirect(req.body.room)
+  //send message to socket that new room was created
+  io.emit('room created', req.body.room)
+  
 })
 
 io.engine.use(sessionMiddleware);
